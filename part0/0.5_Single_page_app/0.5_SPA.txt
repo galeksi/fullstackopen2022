@@ -1,0 +1,18 @@
+title SPA
+
+browser->server: GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: HTML-code
+browser->server: GET /main.css
+server-->browser: main.css
+browser->server: GET /spa.js
+server-->browser: spa.js
+note over browser
+    browser executes js-code that 
+    requests JSON data from server
+end note
+browser->server: GET /data.json
+server-->browser: data.json
+note over browser
+    browser executes event handler
+    that renders notes to display
+end note

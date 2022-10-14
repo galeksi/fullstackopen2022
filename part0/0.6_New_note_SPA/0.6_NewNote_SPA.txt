@@ -1,0 +1,19 @@
+title New note (SPA)
+
+note left of browser
+    On /spa a note is written and 
+    the 'Save' button clicked.
+    JS Code is excecuted, 
+    default submit prohibited,
+    note added, rendered
+    and finally sent to server.
+end note
+browser->server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over server
+    server code saves data 
+    to an array 'notes'
+end note
+server-->browser: Status 201 - no redirect
+note left of browser
+    No further requests
+end note
