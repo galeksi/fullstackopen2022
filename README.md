@@ -7,4 +7,5 @@
         0.5: Single page app    
         0.6: New note (SPA)
     part1 - Introduction to React
+        1.1-1.2: Course information
   
