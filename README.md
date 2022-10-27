@@ -2,7 +2,7 @@
 
 ### University of Helsinki Full Stack Open 2022/2023 Excercises
 
-All exercises are submitted to the same repository. After finisheing an exercise it is committed with an according message.
+All exercises are submitted to the same repository. After finishing an exercise it is committed with an according message.
 
     part0 - Fundamentals of Web apps
         0.4: New note
