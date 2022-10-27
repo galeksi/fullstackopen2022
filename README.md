@@ -11,5 +11,5 @@ All exercises are submitted to the same repository. After finishing an exercise 
     part1 - Introduction to React
         1.1-1.5: Course information
         1.6-1.11: Unicafe
-        1.12/1.14: Anecdotes
+        1.12-1.14: Anecdotes
   
