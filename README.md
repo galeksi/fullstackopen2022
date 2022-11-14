@@ -12,4 +12,11 @@ All exercises are submitted to the same repository. After finishing an exercise 
         1.1-1.5: Course information
         1.6-1.11: Unicafe
         1.12-1.14: Anecdotes
+    part2 - Communicating with Server
+        2.1-2.5: Course information (part2)
+        2.6-2.20: Phonebook (frontend)
+        2.12-2.13: Data for countries
+    part3 - Programming a server with NodeJS and Express
+        -> Exercises submitted in seperate repository
+        -> /galeksi/fullstackopen2022_part3/
   
