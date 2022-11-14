@@ -1,0 +1,16 @@
+@baseUrl = http://localhost:3003/
+@testId = 636cf684089d73f0db2d8832
+
+### Delete
+DELETE {{baseUrl}}api/blogs/{{testId}}
+
+### Add person
+POST {{baseUrl}}api/blogs
+Content-Type: application/json
+
+{
+    "title": "Hello World 2",
+    "author": "Peter Pan 2",
+    "url": "www.test2.com",
+    "likes": 10
+}
