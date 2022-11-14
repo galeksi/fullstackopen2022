@@ -9,8 +9,8 @@ POST {{baseUrl}}api/blogs
 Content-Type: application/json
 
 {
-    "title": "Hello World 2",
-    "author": "Peter Pan 2",
-    "url": "www.test2.com",
+    "title": "Hello World 3",
+    "author": "Peter Pan 3",
+    "url": "www.test3.com",
     "likes": 10
 }
