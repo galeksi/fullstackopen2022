@@ -9,8 +9,18 @@ POST {{baseUrl}}api/blogs
 Content-Type: application/json
 
 {
-    "title": "Hello World 4",
-    "author": "Peter Pan 4",
-    "url": "www.test4.com",
+    "title": "Hello World 5",
+    "author": "Peter Pan 5",
+    "url": "www.test5.com",
+    "likes": 10
+}
+
+### Add person without likes
+POST {{baseUrl}}api/blogs
+Content-Type: application/json
+
+{
+    "title": "Hello World 5",
+    "author": "Peter Pan 5",
     "likes": 10
 }
