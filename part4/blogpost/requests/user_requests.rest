@@ -1,0 +1,25 @@
+@baseUrl = http://localhost:3003/
+@testId = 63724bf80d739d927ae64c32
+
+### Delete user
+DELETE {{baseUrl}}api/users/{{testId}}
+
+### Add valid user
+POST {{baseUrl}}api/users
+Content-Type: application/json
+
+{
+    "username": "arendel",
+    "name": "Aleksi Rendel",
+    "password": "secret"
+}
+
+### Add invalid user
+POST {{baseUrl}}api/users
+Content-Type: application/json
+
+{
+    "username": "u",
+    "name": "Aleksi Rendel",
+    "password": "secret"
+}

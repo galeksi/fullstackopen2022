@@ -1,10 +1,10 @@
 @baseUrl = http://localhost:3003/
 @testId = 63724bf80d739d927ae64c32
 
-### Delete
+### Delete blog
 DELETE {{baseUrl}}api/blogs/{{testId}}
 
-### Add person
+### Add blog
 POST {{baseUrl}}api/blogs
 Content-Type: application/json
 
@@ -15,7 +15,7 @@ Content-Type: application/json
     "likes": 10
 }
 
-### Add person without likes
+### Add blog without likes
 POST {{baseUrl}}api/blogs
 Content-Type: application/json
 
