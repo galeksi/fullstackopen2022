@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3003/
-@testId = 636cf684089d73f0db2d8832
+@testId = 63724bf80d739d927ae64c32
 
 ### Delete
 DELETE {{baseUrl}}api/blogs/{{testId}}
@@ -23,4 +23,15 @@ Content-Type: application/json
     "title": "Hello World 5",
     "author": "Peter Pan 5",
     "likes": 10
+}
+
+### Update blog
+PUT {{baseUrl}}api/blogs/{{testId}}
+Content-Type: application/json
+
+{
+    "title": "Hello World Updated",
+    "author": "Peter Pan Updated",
+    "url": "www.update.com",
+    "likes": 100
 }
