@@ -9,7 +9,6 @@ const loginRouter = require('./controllers/login')
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
-const { unsubscribe } = require('./controllers/blogs')
 const mongoUrl = config.MONGODB_URI
 
 // console.log(mongoUrl)
