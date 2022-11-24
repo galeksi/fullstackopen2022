@@ -55,6 +55,11 @@ const App = () => {
           setNotification(`${returnedPerson.name} was succesfully added to the phonebook`)
           setTimeout(() => setNotification(null), 5000)
         })
+        .catch(error => {
+          console.log(error.response.data.error)
+          setErrorMessage(`${error.response.data.error}`)
+          setTimeout(() => setErrorMessage(null), 5000)
+        })
     }
   }
 
@@ -63,9 +68,16 @@ const App = () => {
     const updatedPerson = { ...person, number: newNumber}
     personService
       .update(id, updatedPerson)
-      .then(setPersons(persons.map(person => person.id !== id ? person : updatedPerson)))
-    setNotification(`${person.name} was updated succesfully`)
-    setTimeout(() => setNotification(null), 5000)
+      .then(() => {
+        setPersons(persons.map(person => person.id !== id ? person : updatedPerson))
+        setNotification(`${person.name} was updated succesfully`)
+        setTimeout(() => setNotification(null), 5000)
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setErrorMessage(`${error.response.data.error}`)
+        setTimeout(() => setErrorMessage(null), 5000)
+      })
   }
 
   const deletePerson = (personId) => {
