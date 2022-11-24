@@ -1,12 +1,15 @@
 @baseUrl = http://localhost:3003/
-@testId = 63724bf80d739d927ae64c32
-
+@testId = 637f6e79ffa6b69af90c2ee9
+@token = bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZW5kZWwiLCJpZCI6IjYzN2UzOTJkMWZhMGY5ZGU4YWU5ZjNhNCIsImlhdCI6MTY2OTI4MzU3Mn0.wAe6YIg-L5rE1GOODc5anpXLizXES4-PaK3t5m8VX98
+@token2 = bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZW5kZWwyIiwiaWQiOiI2MzdmNjYxNDhlOTExYTYyYjM1MmQwMzciLCJpYXQiOjE2NjkyOTM2MTEsImV4cCI6MTY2OTM4MDAxMX0.p8BuKczWo4-8SB5nzyx0WPedkq0VvohhvI2Pm33rk-Y
 ### Delete blog
 DELETE {{baseUrl}}api/blogs/{{testId}}
+Authorization: {{token}}
 
 ### Add blog
 POST {{baseUrl}}api/blogs
 Content-Type: application/json
+Authorization: {{token}}
 
 {
     "title": "Hello World 5",

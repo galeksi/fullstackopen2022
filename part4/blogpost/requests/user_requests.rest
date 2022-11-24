@@ -9,9 +9,9 @@ POST {{baseUrl}}api/users
 Content-Type: application/json
 
 {
-    "username": "arendel",
+    "username": "arendel2",
     "name": "Aleksi Rendel",
-    "password": "secret"
+    "password": "secret2"
 }
 
 ### Add invalid user
@@ -22,4 +22,22 @@ Content-Type: application/json
     "username": "u",
     "name": "Aleksi Rendel",
     "password": "secret"
+}
+
+### Valid user login
+POST {{baseUrl}}api/login
+Content-Type: application/json
+
+{
+    "username": "arendel2",
+    "password": "secret2"
+}
+
+### Invalid user login
+POST {{baseUrl}}api/login
+Content-Type: application/json
+
+{
+    "username": "arende",
+    "password": "secre"
 }
