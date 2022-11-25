@@ -19,4 +19,8 @@ All exercises are submitted to the same repository. After finishing an exercise 
     part3 - Programming a server with NodeJS and Express
         -> Exercises submitted in seperate repository
         -> /galeksi/fullstackopen2022_part3/
+    part4 - Testing Express servers, user administration
+        -> 4.1-4.22: Bloglist
+    part5 - Testing React apps
+        -> 5.1-       
   
