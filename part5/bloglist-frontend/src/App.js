@@ -4,9 +4,11 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import Error from './components/Error'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [newBlogVisible, setNewBlogVisible] = useState(false)
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
@@ -90,18 +92,30 @@ const App = () => {
       </form>
   )
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
+  const blogForm = () => {
+    const hideWhenVisible = { display: newBlogVisible ? 'none' : '' }
+    const showWhenVisible = { display: newBlogVisible ? '' : 'none' }
+    
+    return (
       <div>
-        title: <input value={title} onChange={handleTitleChange} /> <br />
-        author: <input value={author} onChange={handleAuthorChange} /> <br />
-        url: <input value={blogUrl} onChange={handleUrlChange} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
+        <div style={hideWhenVisible}>
+          <button onClick={() => setNewBlogVisible(true)}>Add blog</button>
+        </div>
+        <div style={showWhenVisible}>
+        <BlogForm
+          title={title} 
+          handleTitleChange={handleTitleChange}
+          author={author} 
+          handleAuthorChange={handleAuthorChange}
+          url={blogUrl} 
+          handleUrlChange={handleUrlChange}
+          addBlog={addBlog}
+        />
+          <button onClick={() => setNewBlogVisible(false)}>cancel</button>
+        </div>
+      </div>  
+    )
+  }
 
   const addBlog = async (event) => {
     event.preventDefault()
@@ -135,10 +149,9 @@ const App = () => {
           <p>{user.name} logged-in&nbsp;
            <button onClick={handleLogout}>logout</button>
           </p>
-          <h2>Add blog</h2>
-          {blogForm()}
         </div>
       }
+      {blogForm()}
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
