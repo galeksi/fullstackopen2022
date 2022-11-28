@@ -94,7 +94,7 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const addedBlog = await blogService.create(blogObject)
-      console.log(addedBlog)
+      // console.log(addedBlog)
       setBlogs(blogs.concat(addedBlog))
       setNotification(`${addedBlog.title} was added`)
       setTimeout(() => setNotification(null), 5000)
@@ -121,15 +121,18 @@ const App = () => {
   }
 
   const deleteBlog = async (id) => {
-    try{
-      await blogService.destroy(id)
-      const updatedBlogs = blogs.filter(blog => blog.id !== id)
-      sortAndSetBlogs(updatedBlogs)
-      setNotification(`Blog was deleted succesfully.`)
-      setTimeout(() => setNotification(null), 5000)
-    } catch (exception) {
-      setErrorMessage('Couldnt delete blog.')
-      setTimeout(() => setErrorMessage(null), 5000)
+    const blogToDelete = blogs.find(b => b.id === id)
+    if (window.confirm(`Delete ${blogToDelete.title}`)) {
+      try{
+        await blogService.destroy(id)
+        const updatedBlogs = blogs.filter(blog => blog.id !== id)
+        sortAndSetBlogs(updatedBlogs)
+        setNotification(`${blogToDelete.title} deleted.`)
+        setTimeout(() => setNotification(null), 5000)
+      } catch (exception) {
+        setErrorMessage('Could not delete blog.')
+        setTimeout(() => setErrorMessage(null), 5000)
+      }
     }
   }
   
