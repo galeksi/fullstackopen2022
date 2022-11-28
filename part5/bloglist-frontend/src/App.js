@@ -17,9 +17,9 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    blogService
+    .getAll()
+    .then(blogs => sortAndSetBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -31,7 +31,10 @@ const App = () => {
     }
   }, [])
 
-
+  const sortAndSetBlogs = (blogs) => {
+    blogs.sort((a, b) => b.likes - a.likes)
+    setBlogs(blogs)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -91,11 +94,41 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const addedBlog = await blogService.create(blogObject)
+      console.log(addedBlog)
       setBlogs(blogs.concat(addedBlog))
       setNotification(`${addedBlog.title} was added`)
       setTimeout(() => setNotification(null), 5000)
     } catch (exception) {
       setErrorMessage('Valid blog needed')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
+  }
+
+  const updateBlogLikes = async (id) => {
+    try {
+      const blog = blogs.find(b => b.id === id)
+      const updatedLikes = { likes: blog.likes += 1 }
+      // console.log(updatedLikes)
+      await blogService.update(id, updatedLikes)
+      const updatedBlogs = await blogService.getAll()
+      sortAndSetBlogs(updatedBlogs)
+      setNotification(`${blog.title} updated succesfully.`)
+      setTimeout(() => setNotification(null), 5000)
+    } catch(exception) {
+      setErrorMessage('Error, couldnt update likes.')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
+  }
+
+  const deleteBlog = async (id) => {
+    try{
+      await blogService.destroy(id)
+      const updatedBlogs = blogs.filter(blog => blog.id !== id)
+      sortAndSetBlogs(updatedBlogs)
+      setNotification(`Blog was deleted succesfully.`)
+      setTimeout(() => setNotification(null), 5000)
+    } catch (exception) {
+      setErrorMessage('Couldnt delete blog.')
       setTimeout(() => setErrorMessage(null), 5000)
     }
   }
@@ -118,7 +151,13 @@ const App = () => {
       </Togglable>
       <h2>blogs</h2>
       {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+        <Blog 
+          key={blog.id} 
+          blog={blog}
+          user={user}
+          updateBlogLikes={updateBlogLikes} 
+          deleteBlog={deleteBlog}
+        />
       )}
     </div>
   )
