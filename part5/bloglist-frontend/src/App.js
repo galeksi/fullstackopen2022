@@ -18,8 +18,8 @@ const App = () => {
 
   useEffect(() => {
     blogService
-    .getAll()
-    .then(blogs => sortAndSetBlogs(blogs))
+      .getAll()
+      .then(blogs => sortAndSetBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -69,27 +69,27 @@ const App = () => {
   }
 
   const loginForm = () => (
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+    <form onSubmit={handleLogin}>
+      <div>
+        username
+        <input
+          type="text"
+          value={username}
+          name="Username"
+          onChange={({ target }) => setUsername(target.value)}
+        />
+      </div>
+      <div>
+        password
+        <input
+          type="password"
+          value={password}
+          name="Password"
+          onChange={({ target }) => setPassword(target.value)}
+        />
+      </div>
+      <button type="submit">login</button>
+    </form>
   )
 
   const addBlog = async (blogObject) => {
@@ -138,17 +138,17 @@ const App = () => {
       }
     }
   }
-  
+
   return (
     <div>
       <h1>Bloglist</h1>
       <Notification message={notification} />
       <Error message={errorMessage} />
-      {user === null ? 
+      {user === null ?
         loginForm() :
         <div>
           <p>{user.name} logged-in&nbsp;
-           <button onClick={handleLogout}>logout</button>
+            <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
             <BlogForm createBlog={addBlog}/>
@@ -157,11 +157,11 @@ const App = () => {
       }
       <h2>blogs</h2>
       {blogs.map(blog =>
-        <Blog 
-          key={blog.id} 
+        <Blog
+          key={blog.id}
           blog={blog}
           user={user}
-          updateBlogLikes={updateBlogLikes} 
+          updateBlogLikes={updateBlogLikes}
           deleteBlog={deleteBlog}
         />
       )}
