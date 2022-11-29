@@ -50,6 +50,7 @@ const App = () => {
       )
 
       setUser(user)
+      blogService.setToken(user.token)
       setUsername('')
       setPassword('')
       setNotification(`${user.name} succesfully logged in`)
@@ -95,7 +96,9 @@ const App = () => {
     try {
       const addedBlog = await blogService.create(blogObject)
       // console.log(addedBlog)
-      setBlogs(blogs.concat(addedBlog))
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+      // setBlogs(blogs.concat(addedBlog))
       setNotification(`${addedBlog.title} was added`)
       setTimeout(() => setNotification(null), 5000)
     } catch (exception) {
@@ -147,11 +150,11 @@ const App = () => {
           <p>{user.name} logged-in&nbsp;
            <button onClick={handleLogout}>logout</button>
           </p>
+          <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
+            <BlogForm createBlog={addBlog}/>
+          </Togglable>
         </div>
       }
-      <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
-        <BlogForm createBlog={addBlog}/>
-      </Togglable>
       <h2>blogs</h2>
       {blogs.map(blog =>
         <Blog 
