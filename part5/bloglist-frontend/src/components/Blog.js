@@ -16,17 +16,17 @@ const Blog = ({ blog, user, updateBlogLikes, deleteBlog }) => {
   const toggleVisibility = () => { setVisible(!visible) }
 
   return (
-    <div>
-      <div style={Object.assign(showWhenVisible, blogStyle)}>
+    <div className='blog'>
+      <div className='blogShort' style={Object.assign(showWhenVisible, blogStyle)}>
         {blog.title} {blog.author}<button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={Object.assign(hideWhenVisible, blogStyle)}>
+      <div className='blogLong' style={Object.assign(hideWhenVisible, blogStyle)}>
         {blog.title} {blog.author}<button onClick={toggleVisibility}>hide</button><br/>
         {blog.url}<br/>
         likes&nbsp;{blog.likes}&nbsp;<button onClick={() => updateBlogLikes(blog.id)}>like</button><br/>
         {blog.user.name}<br />
-        {blog.user.id}<br />
-        {user.id}<br />
+        {/* {blog.user.id}<br />
+        {user.id}<br /> */}
         {user && blog.user.id === user.id
           ? <button onClick = { () => deleteBlog(blog.id)}>Delete</button>
           : null
