@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
     "username": "arendel2",
-    "name": "Aleksi Rendel",
+    "name": "Aleksi Rendel2",
     "password": "secret2"
 }
 
@@ -29,8 +29,8 @@ POST {{baseUrl}}api/login
 Content-Type: application/json
 
 {
-    "username": "arendel2",
-    "password": "secret2"
+    "username": "arendel",
+    "password": "secret"
 }
 
 ### Invalid user login
