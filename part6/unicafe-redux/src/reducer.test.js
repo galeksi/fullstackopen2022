@@ -15,6 +15,7 @@ describe('unicafe reducer', () => {
     }
 
     const newState = counterReducer(undefined, action)
+    console.log(newState)
     expect(newState).toEqual(initialState)
   })
 
