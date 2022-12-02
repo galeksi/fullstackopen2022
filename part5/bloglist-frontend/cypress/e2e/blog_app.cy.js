@@ -61,11 +61,26 @@ describe('Blog app', function () {
       cy.contains('likes').contains('11')
     })
 
-    it.only('blog can be deleted', function () {
+    it('blog can be deleted', function () {
       cy.contains('Hello World 10').contains('view').click()
-      cy.contains('likes').contains('Delete').click()
+      cy.contains('Delete').click()
       cy.visit('http://localhost:3000')
-      cy.get('#bloglist').should('not.contain', 'Hello World 10')
+      cy.get('.bloglist').should('not.contain', 'Hello World 10')
+    })
+
+    it.only('blogs are sorted by descending likes', function () {
+      cy.get('.blog').eq(0).should('contain', 'Hello World 10')
+      cy.get('.blog').eq(1).should('contain', 'Hello World 5')
+      cy.get('.blog').eq(2).should('contain', 'Hello World 1')
+
+      cy.addBlog({ title: 'Hello World 0', author: 'Peter Pan 0', url: 'www.test1.com', likes: 0 })
+      cy.get('.blog').eq(3).should('contain', 'Hello World 0')
+      cy.get('.blog').eq(3).contains('view').click()
+      cy.get('.blog').eq(3).contains('like').click()
+      cy.get('.blog').eq(3).contains('like').click()
+      cy.visit('http://localhost:3000')
+      cy.get('.blog').eq(2).should('contain', 'Hello World 0')
+      cy.get('.blog').eq(3).should('contain', 'Hello World 1')
     })
   })
 })
