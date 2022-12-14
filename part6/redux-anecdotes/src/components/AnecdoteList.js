@@ -7,9 +7,12 @@ const AnecdoteList = (props) => {
   const filter = useSelector(state => state.filter)
   const anecdotes = useSelector(state => state.anecdotes)
 
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+  // console.log(sortedAnecdotes)
+
   const anecdotesToShow = filter === ''
-    ? anecdotes
-    : anecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()))
+    ? sortedAnecdotes
+    : sortedAnecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()))
 
   const vote = (id) => {
     // console.log('vote', id)
