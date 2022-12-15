@@ -6,6 +6,7 @@ const AnecdoteList = (props) => {
   const dispatch = useDispatch()
   const filter = useSelector(state => state.filter)
   const anecdotes = useSelector(state => state.anecdotes)
+  const notificationId = useSelector(state => state.notifications.timeoutId)
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
@@ -19,7 +20,7 @@ const AnecdoteList = (props) => {
     const votedAnecdote = {...anecdote, votes: anecdote.votes + 1}
     
     dispatch(voteAnecdote(id, votedAnecdote))
-    dispatch(setNotification(`You voted for "${anecdote.content}"`, 10))
+    dispatch(setNotification(`You voted for "${anecdote.content}"`, 10, notificationId))
   }
 
   return (
