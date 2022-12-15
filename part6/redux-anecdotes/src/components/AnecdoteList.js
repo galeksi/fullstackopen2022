@@ -8,7 +8,6 @@ const AnecdoteList = (props) => {
   const anecdotes = useSelector(state => state.anecdotes)
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
-  // console.log(sortedAnecdotes)
 
   const anecdotesToShow = filter === ''
     ? sortedAnecdotes
@@ -17,7 +16,9 @@ const AnecdoteList = (props) => {
   const vote = (id) => {
     // console.log('vote', id)
     const anecdote = anecdotes.find(a => a.id === id)
-    dispatch(voteAnecdote(id))
+    const votedAnecdote = {...anecdote, votes: anecdote.votes + 1}
+    
+    dispatch(voteAnecdote(id, votedAnecdote))
     dispatch(createNotification(`You voted for "${anecdote.content}"`))
     setTimeout(() => {
       dispatch(removeNotification(''))
