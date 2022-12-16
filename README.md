@@ -22,5 +22,9 @@ All exercises are submitted to the same repository. After finishing an exercise 
     part4 - Testing Express servers, user administration
         -> 4.1-4.22: Bloglist
     part5 - Testing React apps
-        -> 5.1-       
+        -> 5.1-5.22: Bloglist-frontend
+    part6 - State management with Redux
+        -> 6.1-6.2: Unicafe-redux
+        -> 6.3-6.21: Redux-anecdotes
+    part7 - React router, custom hooks, styling app with CSS and webpack
   
