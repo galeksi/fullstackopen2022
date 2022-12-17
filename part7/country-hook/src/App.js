@@ -17,8 +17,16 @@ const useField = (type) => {
 
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
-
-  useEffect(() => {})
+  const baseUrl = 'https://restcountries.com/v3.1/all'
+  
+  useEffect(() => {
+    const getCountry = async () => {
+      const countries = await axios.get(baseUrl)
+      const countryQuery = countries.data.find(country => country.name.common === name)
+      setCountry(countryQuery)
+    }
+    getCountry()
+  },[name])
 
   return country
 }
@@ -52,7 +60,7 @@ const App = () => {
     <div>
       <form onSubmit={fetch}>
         <input {...nameInput} />
-        <button>find</button>
+        <button type='submit'>find</button>
       </form>
 
       <Country country={country} />
