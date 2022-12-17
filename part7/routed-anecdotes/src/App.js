@@ -91,9 +91,9 @@ const Notification = ({ message }) => {
 }
 
 const CreateNew = (props) => {
-  const content = useField('content')
-  const author = useField('author')
-  const info = useField('info')
+  const { reset: resetContent, ...content } = useField('content')
+  const { reset: resetAuthor, ...author } = useField('author')
+  const { reset: resetInfo, ...info } = useField('info')
 
   const navigate = useNavigate()
 
@@ -106,6 +106,13 @@ const CreateNew = (props) => {
       votes: 0
     })
     navigate('/')
+  }
+
+  const clearFields = (e) => {
+    e.preventDefault()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -124,7 +131,7 @@ const CreateNew = (props) => {
           url for more info
           <input {...info} />
         </div>
-        <button type="submit">create</button>
+        <button type="submit">create</button><button onClick={clearFields}>reset</button>
       </form>
     </div>
   )
