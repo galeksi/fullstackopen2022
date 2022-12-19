@@ -7,18 +7,19 @@ import { setNotification } from './reducers/notificationReducer'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  // const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const dispatch = useDispatch()
-  const notification = useSelector((state) => state.notifications)
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => sortAndSetBlogs(blogs))
+    // blogService.getAll().then((blogs) => sortAndSetBlogs(blogs))
+    dispatch(initializeBlogs())
   }, [])
 
   useEffect(() => {
@@ -30,10 +31,13 @@ const App = () => {
     }
   }, [])
 
-  const sortAndSetBlogs = (blogs) => {
-    blogs.sort((a, b) => b.likes - a.likes)
-    setBlogs(blogs)
-  }
+  const notification = useSelector((state) => state.notifications)
+  const blogs = useSelector((state) => state.blogs)
+
+  // const sortAndSetBlogs = (blogs) => {
+  //   blogs.sort((a, b) => b.likes - a.likes)
+  //   setBlogs(blogs)
+  // }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -91,45 +95,38 @@ const App = () => {
     </form>
   )
 
-  const addBlog = async (blogObject) => {
-    try {
-      const addedBlog = await blogService.create(blogObject)
-      // console.log(addedBlog)
-      const updatedBlogs = await blogService.getAll()
-      setBlogs(updatedBlogs)
-      // setBlogs(blogs.concat(addedBlog))
-      dispatch(setNotification(`${addedBlog.title} was added`, 5))
-    } catch (exception) {
-      dispatch(setNotification('Valid blog needed', 5, 'error'))
-    }
+  const addBlog = (blogObject) => {
+    dispatch(createBlog(blogObject))
   }
 
   const updateBlogLikes = async (id) => {
-    try {
-      const blog = blogs.find((b) => b.id === id)
-      const updatedLikes = { likes: (blog.likes += 1) }
-      // console.log(updatedLikes)
-      await blogService.update(id, updatedLikes)
-      const updatedBlogs = await blogService.getAll()
-      sortAndSetBlogs(updatedBlogs)
-      dispatch(setNotification(`${blog.title} updated succesfully.`, 5))
-    } catch (exception) {
-      dispatch(setNotification('Error, couldnt update likes.', 5, 'error'))
-    }
+    return id
+    // try {
+    //   const blog = blogs.find((b) => b.id === id)
+    //   const updatedLikes = { likes: (blog.likes += 1) }
+    //   // console.log(updatedLikes)
+    //   await blogService.update(id, updatedLikes)
+    //   const updatedBlogs = await blogService.getAll()
+    //   sortAndSetBlogs(updatedBlogs)
+    //   dispatch(setNotification(`${blog.title} updated succesfully.`, 5))
+    // } catch (exception) {
+    //   dispatch(setNotification('Error, couldnt update likes.', 5, 'error'))
+    // }
   }
 
   const deleteBlog = async (id) => {
-    const blogToDelete = blogs.find((b) => b.id === id)
-    if (window.confirm(`Delete ${blogToDelete.title}`)) {
-      try {
-        await blogService.destroy(id)
-        const updatedBlogs = blogs.filter((blog) => blog.id !== id)
-        sortAndSetBlogs(updatedBlogs)
-        dispatch(setNotification(`${blogToDelete.title} deleted.`))
-      } catch (exception) {
-        dispatch(setNotification('Could not delete blog.', 5, 'error'))
-      }
-    }
+    return id
+    // const blogToDelete = blogs.find((b) => b.id === id)
+    // if (window.confirm(`Delete ${blogToDelete.title}`)) {
+    //   try {
+    //     await blogService.destroy(id)
+    //     const updatedBlogs = blogs.filter((blog) => blog.id !== id)
+    //     sortAndSetBlogs(updatedBlogs)
+    //     dispatch(setNotification(`${blogToDelete.title} deleted.`))
+    //   } catch (exception) {
+    //     dispatch(setNotification('Could not delete blog.', 5, 'error'))
+    //   }
+    // }
   }
 
   return (
