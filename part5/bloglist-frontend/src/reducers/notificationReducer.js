@@ -18,7 +18,7 @@ const notificationSlice = createSlice({
 
 export const setNotification = (message, seconds, type = 'info') => {
   return (dispatch) => {
-    console.log(message)
+    // console.log(message)
     // clearTimeout(notificationId)
     dispatch(createNotification({ message, type }))
     setTimeout(() => {

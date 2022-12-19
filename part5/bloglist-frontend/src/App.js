@@ -7,7 +7,12 @@ import { setNotification } from './reducers/notificationReducer'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import {
+  initializeBlogs,
+  createBlog,
+  likeBlog,
+  destroyBlog,
+} from './reducers/blogReducer'
 
 const App = () => {
   // const [blogs, setBlogs] = useState([])
@@ -99,34 +104,17 @@ const App = () => {
     dispatch(createBlog(blogObject))
   }
 
-  const updateBlogLikes = async (id) => {
-    return id
-    // try {
-    //   const blog = blogs.find((b) => b.id === id)
-    //   const updatedLikes = { likes: (blog.likes += 1) }
-    //   // console.log(updatedLikes)
-    //   await blogService.update(id, updatedLikes)
-    //   const updatedBlogs = await blogService.getAll()
-    //   sortAndSetBlogs(updatedBlogs)
-    //   dispatch(setNotification(`${blog.title} updated succesfully.`, 5))
-    // } catch (exception) {
-    //   dispatch(setNotification('Error, couldnt update likes.', 5, 'error'))
-    // }
+  const updateBlogLikes = (id) => {
+    const blog = blogs.find((b) => b.id === id)
+    const updatedLikes = { likes: blog.likes + 1 }
+    dispatch(likeBlog(id, updatedLikes))
   }
 
   const deleteBlog = async (id) => {
-    return id
-    // const blogToDelete = blogs.find((b) => b.id === id)
-    // if (window.confirm(`Delete ${blogToDelete.title}`)) {
-    //   try {
-    //     await blogService.destroy(id)
-    //     const updatedBlogs = blogs.filter((blog) => blog.id !== id)
-    //     sortAndSetBlogs(updatedBlogs)
-    //     dispatch(setNotification(`${blogToDelete.title} deleted.`))
-    //   } catch (exception) {
-    //     dispatch(setNotification('Could not delete blog.', 5, 'error'))
-    //   }
-    // }
+    const blogToDelete = blogs.find((b) => b.id === id)
+    if (window.confirm(`Delete ${blogToDelete.title}`)) {
+      dispatch(destroyBlog(id))
+    }
   }
 
   return (
