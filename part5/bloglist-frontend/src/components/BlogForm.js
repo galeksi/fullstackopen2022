@@ -14,7 +14,7 @@ const BlogForm = ({ createBlog }) => {
     const blogObject = {
       title: title,
       author: author,
-      url: blogUrl
+      url: blogUrl,
     }
     createBlog(blogObject)
     setAuthor('')
@@ -27,27 +27,34 @@ const BlogForm = ({ createBlog }) => {
       <h2>Add blog</h2>
       <form onSubmit={addBlog}>
         <div>
-          title: <input
-            id='title'
+          title:{' '}
+          <input
+            id="title"
             value={title}
             onChange={handleTitleChange}
-            placeholder='title'
-          /> <br />
-          author: <input
-            id='author'
+            placeholder="title"
+          />{' '}
+          <br />
+          author:{' '}
+          <input
+            id="author"
             value={author}
             onChange={handleAuthorChange}
-            placeholder='author'
-          /> <br />
-          url: <input
-            id='homepage'
+            placeholder="author"
+          />{' '}
+          <br />
+          url:{' '}
+          <input
+            id="homepage"
             value={blogUrl}
             onChange={handleUrlChange}
-            placeholder='homepage'
+            placeholder="homepage"
           />
         </div>
         <div>
-          <button id='add-blog-button' type="submit">add</button>
+          <button id="add-blog-button" type="submit">
+            add
+          </button>
         </div>
       </form>
     </div>

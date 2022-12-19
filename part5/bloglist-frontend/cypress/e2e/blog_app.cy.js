@@ -4,7 +4,7 @@ describe('Blog app', function () {
     const user = {
       name: 'Aleksi Rendel',
       username: 'arendel',
-      password: 'secret'
+      password: 'secret',
     }
     cy.request('POST', 'http://localhost:3003/api/users/', user)
     cy.visit('http://localhost:3000')
@@ -37,9 +37,24 @@ describe('Blog app', function () {
     beforeEach(function () {
       cy.login({ username: 'arendel', password: 'secret' })
 
-      cy.addBlog({ title: 'Hello World 5', author: 'Peter Pan 5', url: 'www.test5.com', likes: 5 })
-      cy.addBlog({ title: 'Hello World 1', author: 'Peter Pan 1', url: 'www.test1.com', likes: 1 })
-      cy.addBlog({ title: 'Hello World 10', author: 'Peter Pan 10', url: 'www.test10.com', likes: 10 })
+      cy.addBlog({
+        title: 'Hello World 5',
+        author: 'Peter Pan 5',
+        url: 'www.test5.com',
+        likes: 5,
+      })
+      cy.addBlog({
+        title: 'Hello World 1',
+        author: 'Peter Pan 1',
+        url: 'www.test1.com',
+        likes: 1,
+      })
+      cy.addBlog({
+        title: 'Hello World 10',
+        author: 'Peter Pan 10',
+        url: 'www.test10.com',
+        likes: 10,
+      })
       cy.visit('http://localhost:3000')
     })
 
@@ -73,7 +88,12 @@ describe('Blog app', function () {
       cy.get('.blog').eq(1).should('contain', 'Hello World 5')
       cy.get('.blog').eq(2).should('contain', 'Hello World 1')
 
-      cy.addBlog({ title: 'Hello World 0', author: 'Peter Pan 0', url: 'www.test1.com', likes: 0 })
+      cy.addBlog({
+        title: 'Hello World 0',
+        author: 'Peter Pan 0',
+        url: 'www.test1.com',
+        likes: 0,
+      })
       cy.get('.blog').eq(3).should('contain', 'Hello World 0')
       cy.get('.blog').eq(3).contains('view').click()
       cy.get('.blog').eq(3).contains('like').click()

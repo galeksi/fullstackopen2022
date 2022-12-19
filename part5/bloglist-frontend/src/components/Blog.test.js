@@ -13,13 +13,13 @@ describe('blog rendering', () => {
     user: {
       username: 'testuser',
       name: 'user',
-      id: '1234'
-    }
+      id: '1234',
+    },
   }
   const user = {
     username: 'testuser',
     name: 'user',
-    id: '1234'
+    id: '1234',
   }
   const mockHandlerLikes = jest.fn()
   const mockHandlerDelete = jest.fn()
@@ -27,12 +27,14 @@ describe('blog rendering', () => {
   let container
 
   beforeEach(() => {
-    container = render(<Blog
-      blog={blog}
-      user={user}
-      updateBlogLikes={mockHandlerLikes}
-      deleteBlog={mockHandlerDelete}
-    />).container
+    container = render(
+      <Blog
+        blog={blog}
+        user={user}
+        updateBlogLikes={mockHandlerLikes}
+        deleteBlog={mockHandlerDelete}
+      />
+    ).container
   })
 
   test('collapsed blog renders only title and author', () => {

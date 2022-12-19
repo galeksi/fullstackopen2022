@@ -17,9 +17,7 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs => sortAndSetBlogs(blogs))
+    blogService.getAll().then((blogs) => sortAndSetBlogs(blogs))
   }, [])
 
   useEffect(() => {
@@ -42,12 +40,11 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username,
+        password,
       })
 
-      window.localStorage.setItem(
-        'loggedUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
 
       setUser(user)
       blogService.setToken(user.token)
@@ -73,7 +70,7 @@ const App = () => {
       <div>
         username
         <input
-          id='username'
+          id="username"
           type="text"
           value={username}
           name="Username"
@@ -83,14 +80,16 @@ const App = () => {
       <div>
         password
         <input
-          id='password'
+          id="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button id='login-button' type="submit">login</button>
+      <button id="login-button" type="submit">
+        login
+      </button>
     </form>
   )
 
@@ -111,26 +110,26 @@ const App = () => {
 
   const updateBlogLikes = async (id) => {
     try {
-      const blog = blogs.find(b => b.id === id)
-      const updatedLikes = { likes: blog.likes += 1 }
+      const blog = blogs.find((b) => b.id === id)
+      const updatedLikes = { likes: (blog.likes += 1) }
       // console.log(updatedLikes)
       await blogService.update(id, updatedLikes)
       const updatedBlogs = await blogService.getAll()
       sortAndSetBlogs(updatedBlogs)
       setNotification(`${blog.title} updated succesfully.`)
       setTimeout(() => setNotification(null), 5000)
-    } catch(exception) {
+    } catch (exception) {
       setErrorMessage('Error, couldnt update likes.')
       setTimeout(() => setErrorMessage(null), 5000)
     }
   }
 
   const deleteBlog = async (id) => {
-    const blogToDelete = blogs.find(b => b.id === id)
+    const blogToDelete = blogs.find((b) => b.id === id)
     if (window.confirm(`Delete ${blogToDelete.title}`)) {
-      try{
+      try {
         await blogService.destroy(id)
-        const updatedBlogs = blogs.filter(blog => blog.id !== id)
+        const updatedBlogs = blogs.filter((blog) => blog.id !== id)
         sortAndSetBlogs(updatedBlogs)
         setNotification(`${blogToDelete.title} deleted.`)
         setTimeout(() => setNotification(null), 5000)
@@ -146,19 +145,21 @@ const App = () => {
       <h1>Bloglist</h1>
       <Notification message={notification} />
       <Error message={errorMessage} />
-      {user === null ?
-        loginForm() :
+      {user === null ? (
+        loginForm()
+      ) : (
         <div>
-          <p>{user.name} logged-in&nbsp;
+          <p>
+            {user.name} logged-in&nbsp;
             <button onClick={handleLogout}>logout</button>
           </p>
           <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
-            <BlogForm createBlog={addBlog}/>
+            <BlogForm createBlog={addBlog} />
           </Togglable>
         </div>
-      }
-      <h2 className='bloglist'>blogs</h2>
-      {blogs.map(blog =>
+      )}
+      <h2 className="bloglist">blogs</h2>
+      {blogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
@@ -166,7 +167,7 @@ const App = () => {
           updateBlogLikes={updateBlogLikes}
           deleteBlog={deleteBlog}
         />
-      )}
+      ))}
     </div>
   )
 }
