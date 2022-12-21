@@ -16,7 +16,7 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload
     },
-    updateBlog(state, action) {
+    replaceBlog(state, action) {
       const updatedBlog = action.payload
       const blogs = state.map((blog) =>
         blog.id !== updatedBlog.id ? blog : updatedBlog
@@ -42,6 +42,7 @@ export const createBlog = (blogObject) => {
   return async (dispatch) => {
     try {
       const newBlog = await blogService.create(blogObject)
+      console.log(newBlog)
       dispatch(addBlog(newBlog))
       dispatch(setNotification(`${newBlog.title} was added`, 5))
     } catch (exception) {
@@ -50,11 +51,11 @@ export const createBlog = (blogObject) => {
   }
 }
 
-export const likeBlog = (id, likedBlog) => {
+export const updateBlog = (id, updatedField) => {
   return async (dispatch) => {
     try {
-      const updatedBlog = await blogService.update(id, likedBlog)
-      dispatch(updateBlog(updatedBlog))
+      const updatedBlog = await blogService.update(id, updatedField)
+      dispatch(replaceBlog(updatedBlog))
       dispatch(setNotification(`${updatedBlog.title} updated succesfully.`, 5))
     } catch (exception) {
       dispatch(setNotification('Error, couldnt update likes.', 5, 'error'))
@@ -74,5 +75,5 @@ export const destroyBlog = (id) => {
   }
 }
 
-export const { addBlog, setBlogs, updateBlog, removeBlog } = blogSlice.actions
+export const { addBlog, setBlogs, replaceBlog, removeBlog } = blogSlice.actions
 export default blogSlice.reducer

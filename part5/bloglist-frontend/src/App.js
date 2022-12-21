@@ -18,7 +18,7 @@ import { loginUser, setUser, clearUser } from './reducers/userReducer'
 import {
   initializeBlogs,
   createBlog,
-  likeBlog,
+  updateBlog,
   destroyBlog,
 } from './reducers/blogReducer'
 
@@ -104,7 +104,17 @@ const App = () => {
   const updateBlogLikes = (id) => {
     const blog = blogs.find((b) => b.id === id)
     const updatedLikes = { likes: blog.likes + 1 }
-    dispatch(likeBlog(id, updatedLikes))
+    dispatch(updateBlog(id, updatedLikes))
+  }
+
+  const addBlogComment = (event) => {
+    event.preventDefault()
+    const id = event.target.comment.id
+    const comment = event.target.comment.value
+    const blog = blogs.find((b) => b.id === id)
+    const updatedComments = { comments: blog.comments.concat(comment) }
+    dispatch(updateBlog(id, updatedComments))
+    event.target.comment.value = ''
   }
 
   const deleteBlog = (id) => {
@@ -124,7 +134,7 @@ const App = () => {
     }
     return (
       <div>
-        <h2 className="bloglist">blogs</h2>
+        <h2 className="bloglist">Blogs</h2>
         {blogs.map((blog) => (
           <div key={blog.id} style={blogStyle}>
             <Link to={`/blogs/${blog.id}`}>
@@ -133,6 +143,24 @@ const App = () => {
           </div>
         ))}
       </div>
+    )
+  }
+
+  const CommentList = ({ comments }) => {
+    // console.log(comments)
+    if (comments.length === 0) {
+      return (
+        <div>
+          <em>No comments yet!</em>
+        </div>
+      )
+    }
+    return (
+      <ul>
+        {comments.map((c) => (
+          <li key={c}>{c}</li>
+        ))}
+      </ul>
     )
   }
 
@@ -151,10 +179,20 @@ const App = () => {
           {blog.likes}&nbsp;likes&nbsp;
           <button onClick={() => updateBlogLikes(blog.id)}>like</button>
           <div>added by: {blog.author}</div>
+          {/* {console.log(user.id)} */}
+          {console.log(blog.user)}
           {user && blog.user.id === user.id ? (
             <button onClick={() => deleteBlog(blog.id)}>Delete</button>
           ) : null}
         </div>
+        <h2>Comments</h2>
+        <div>
+          <form onSubmit={addBlogComment}>
+            <input name="comment" id={id} />
+            <button type="submit">add comment</button>
+          </form>
+        </div>
+        <CommentList comments={blog.comments} />
       </div>
     )
   }
@@ -208,10 +246,16 @@ const App = () => {
     padding: 5,
   }
 
+  const navStyle = {
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: 'lightgrey',
+  }
+
   return (
     <Router>
       <div>
-        <div>
+        <div style={navStyle}>
           <Link style={padding} to="/">
             blogs
           </Link>
@@ -220,7 +264,7 @@ const App = () => {
           </Link>
           {user ? (
             <>
-              <em>{user.name} logged-in&nbsp;</em>
+              <b>{user.name} logged-in&nbsp;</b>
               <button onClick={handleLogout}>logout</button>
             </>
           ) : null}
