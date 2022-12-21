@@ -2,6 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
 
+const sortBlogs = (blogs) => {
+  return blogs.sort((a, b) => b.likes - a.likes)
+}
+
 const blogSlice = createSlice({
   name: 'blogs',
   initialState: [],
@@ -14,9 +18,10 @@ const blogSlice = createSlice({
     },
     updateBlog(state, action) {
       const updatedBlog = action.payload
-      return state.map((blog) =>
+      const blogs = state.map((blog) =>
         blog.id !== updatedBlog.id ? blog : updatedBlog
       )
+      return sortBlogs(blogs)
     },
     removeBlog(state, action) {
       const id = action.payload
@@ -28,7 +33,8 @@ const blogSlice = createSlice({
 export const initializeBlogs = () => {
   return async (dispatch) => {
     const blogs = await blogService.getAll()
-    dispatch(setBlogs(blogs))
+    const sortedBlogs = sortBlogs(blogs)
+    dispatch(setBlogs(sortedBlogs))
   }
 }
 
