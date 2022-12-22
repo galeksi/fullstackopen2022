@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, useParams, Link, useMatch } from 'react-router-dom'
-// import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -122,23 +121,28 @@ const App = () => {
   }
 
   const BlogList = ({ blogs }) => {
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
-      marginBottom: 5,
-    }
+    // const blogStyle = {
+    //   paddingTop: 10,
+    //   paddingLeft: 2,
+    //   border: 'solid',
+    //   borderWidth: 1,
+    //   marginBottom: 5,
+    // }
     return (
       <div>
         <h2 className="bloglist">Blogs</h2>
-        {blogs.map((blog) => (
-          <div key={blog.id} style={blogStyle}>
-            <Link to={`/blogs/${blog.id}`}>
-              {blog.title} {blog.author}
-            </Link>
-          </div>
-        ))}
+        <Table striped>
+          <tbody>
+            {blogs.map((blog) => (
+              <tr key={blog.id}>
+                <td>
+                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+                </td>
+                <td>{blog.author}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
     )
   }
@@ -175,8 +179,6 @@ const App = () => {
           {blog.likes}&nbsp;likes&nbsp;
           <button onClick={() => updateBlogLikes(blog.id)}>like</button>
           <div>added by: {blog.author}</div>
-          {/* {console.log(user.id)} */}
-          {console.log(blog.user)}
           {user && (blog.user.id === user.id || blog.user === user.id) ? (
             <button onClick={() => deleteBlog(blog.id)}>Delete</button>
           ) : null}
@@ -249,7 +251,7 @@ const App = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <div style={navStyle}>
         <Link style={padding} to="/">
           blogs
