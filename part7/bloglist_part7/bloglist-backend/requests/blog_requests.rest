@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3003/
+@testId = 63a327c51abdeb81038d3b6b
+@token = bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZW5kZWwiLCJpZCI6IjYzN2UzOTJkMWZhMGY5ZGU4YWU5ZjNhNCIsImlhdCI6MTY3MTYzNjA1NCwiZXhwIjoxNjcxNzIyNDU0fQ.vjyYBZqjQ2yUX_dL1dxl3pyJnAx8CXKgn0NxgD6H9Zk
+@token2 = bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFyZW5kZWwyIiwiaWQiOiI2MzdmNjYxNDhlOTExYTYyYjM1MmQwMzciLCJpYXQiOjE2NjkyOTM2MTEsImV4cCI6MTY2OTM4MDAxMX0.p8BuKczWo4-8SB5nzyx0WPedkq0VvohhvI2Pm33rk-Y
+### Delete blog
+DELETE {{baseUrl}}api/blogs/{{testId}}
+Authorization: {{token}}
+
+### Add blog
+POST {{baseUrl}}api/blogs
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "title": "Hello with Comment 2",
+    "author": "Commenter 2",
+    "url": "www.test5.com"
+}
+
+### Add blog without likes
+POST {{baseUrl}}api/blogs
+Content-Type: application/json
+
+{
+    "title": "Hello World 5",
+    "author": "Peter Pan 5",
+    "likes": 10
+}
+
+### Update blog
+PUT {{baseUrl}}api/blogs/{{testId}}
+Content-Type: application/json
+
+{
+    "comments": ["Test", "Test2"]
+}
