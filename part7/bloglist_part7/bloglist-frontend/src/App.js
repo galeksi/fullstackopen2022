@@ -4,7 +4,7 @@ import { Routes, Route, useParams, Link, useMatch } from 'react-router-dom'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import { Table } from 'react-bootstrap'
+import { Table, Form, Button } from 'react-bootstrap'
 import blogService from './services/blogs'
 import userService from './services/users'
 import { setNotification } from './reducers/notificationReducer'
@@ -67,31 +67,29 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
+    <Form onSubmit={handleLogin}>
+      <Form.Group>
+        <Form.Label>username</Form.Label>
+        <Form.Control
           id="username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        password
-        <input
+        <Form.Label>password</Form.Label>
+        <Form.Control
           id="password"
           type="password"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button id="login-button" type="submit">
-        login
-      </button>
-    </form>
+        <Button variant="primary" id="login-button" type="submit">
+          login
+        </Button>
+      </Form.Group>
+    </Form>
   )
 
   const addBlog = (blogObject) => {
@@ -171,18 +169,26 @@ const App = () => {
         <a href={blog.url}>{blog.url}</a>
         <div>
           {blog.likes}&nbsp;likes&nbsp;
-          <button onClick={() => updateBlogLikes(blog.id)}>like</button>
+          <Button variant="success" onClick={() => updateBlogLikes(blog.id)}>
+            like
+          </Button>
           <div>added by: {blog.author}</div>
           {user && (blog.user.id === user.id || blog.user === user.id) ? (
-            <button onClick={() => deleteBlog(blog.id)}>Delete</button>
+            <Button variant="secondary" onClick={() => deleteBlog(blog.id)}>
+              Delete
+            </Button>
           ) : null}
         </div>
         <h2>Comments</h2>
         <div>
-          <form onSubmit={addBlogComment}>
-            <input name="comment" id={id} />
-            <button type="submit">add comment</button>
-          </form>
+          <Form onSubmit={addBlogComment}>
+            <Form.Group>
+              <Form.Control name="comment" id={id} />
+              <Button variant="primary" type="submit">
+                Add comment
+              </Button>
+            </Form.Group>
+          </Form>
         </div>
         <CommentList comments={blog.comments} />
       </div>
@@ -224,7 +230,7 @@ const App = () => {
     return (
       <div>
         <h2>{user.name}</h2>
-        <h3>added blogs</h3>
+        <h3>Added blogs:</h3>
         <ul>
           {user.blogs.map((blog) => (
             <li key={blog.id}>{blog.title}</li>
@@ -256,7 +262,9 @@ const App = () => {
         {user ? (
           <>
             <b>{user.name} logged-in&nbsp;</b>
-            <button onClick={handleLogout}>logout</button>
+            <Button variant="secondary" onClick={handleLogout}>
+              logout
+            </Button>
           </>
         ) : null}
       </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog }) => {
   const [author, setAuthor] = useState('')
@@ -29,38 +30,34 @@ const BlogForm = ({ createBlog }) => {
   return (
     <div>
       <h2>Add blog</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title:{' '}
-          <input
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label>Title:</Form.Label>
+          <Form.Control
             id="title"
             value={title}
             onChange={handleTitleChange}
             placeholder="title"
-          />{' '}
-          <br />
-          author:{' '}
-          <input
+          />
+          <Form.Label>Author:</Form.Label>
+          <Form.Control
             id="author"
             value={author}
             onChange={handleAuthorChange}
             placeholder="author"
-          />{' '}
-          <br />
-          url:{' '}
-          <input
+          />
+          <Form.Label>URL:</Form.Label>
+          <Form.Control
             id="homepage"
             value={blogUrl}
             onChange={handleUrlChange}
             placeholder="homepage"
           />
-        </div>
-        <div>
-          <button id="add-blog-button" type="submit">
-            add
-          </button>
-        </div>
-      </form>
+          <Button variant="primary" id="add-blog-button" type="submit">
+            ADD
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }
