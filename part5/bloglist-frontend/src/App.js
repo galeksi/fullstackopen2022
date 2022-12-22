@@ -1,68 +1,68 @@
 import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route, useParams, Link, useMatch } from 'react-router-dom'
-import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
-import Togglable from './components/Togglable'
+import Blog from './components/Blog'
 import blogService from './services/blogs'
-import userService from './services/users'
-import { setNotification } from './reducers/notificationReducer'
-import { loginUser, setUser, clearUser } from './reducers/userReducer'
-import {
-  initializeBlogs,
-  createBlog,
-  updateBlog,
-  destroyBlog,
-} from './reducers/blogReducer'
+import loginService from './services/login'
+import Notification from './components/Notification'
+import Error from './components/Error'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
-  const dispatch = useDispatch()
+  const [blogs, setBlogs] = useState([])
+  // const [newBlogVisible, setNewBlogVisible] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [users, setUsers] = useState([])
-
-  const initializeUsers = async () => {
-    const initialUsers = await userService.getAll()
-    // console.log(initialUsers)
-    setUsers(initialUsers)
-  }
+  const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [])
-
-  useEffect(() => {
-    initializeUsers()
+    blogService.getAll().then((blogs) => sortAndSetBlogs(blogs))
   }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      dispatch(setUser(user))
+      setUser(user)
       blogService.setToken(user.token)
     }
   }, [])
 
-  const notification = useSelector((state) => state.notifications)
-  const blogs = useSelector((state) => state.blogs)
-  const user = useSelector((state) => state.user)
-
-  const match = useMatch('/blogs/:id')
-  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
+  const sortAndSetBlogs = (blogs) => {
+    blogs.sort((a, b) => b.likes - a.likes)
+    setBlogs(blogs)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
+    // console.log('logging in with', username, password)
 
-    dispatch(loginUser(username, password))
-    setUsername('')
-    setPassword('')
+    try {
+      const user = await loginService.login({
+        username,
+        password,
+      })
+
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+
+      setUser(user)
+      blogService.setToken(user.token)
+      setUsername('')
+      setPassword('')
+      setNotification(`${user.name} succesfully logged in`)
+      setTimeout(() => setNotification(null), 5000)
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
-    dispatch(setNotification(`${user.name} succesfully logged out`, 5))
-    dispatch(clearUser())
+    setNotification(`${user.name} succesfully logged out`)
+    setTimeout(() => setNotification(null), 5000)
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -93,200 +93,81 @@ const App = () => {
     </form>
   )
 
-  const addBlog = (blogObject) => {
-    dispatch(createBlog(blogObject))
+  const addBlog = async (blogObject) => {
+    try {
+      const addedBlog = await blogService.create(blogObject)
+      // console.log(addedBlog)
+      const updatedBlogs = await blogService.getAll()
+      setBlogs(updatedBlogs)
+      // setBlogs(blogs.concat(addedBlog))
+      setNotification(`${addedBlog.title} was added`)
+      setTimeout(() => setNotification(null), 5000)
+    } catch (exception) {
+      setErrorMessage('Valid blog needed')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
   }
 
-  const updateBlogLikes = (id) => {
-    const blog = blogs.find((b) => b.id === id)
-    const updatedLikes = { likes: blog.likes + 1 }
-    dispatch(updateBlog(id, updatedLikes))
+  const updateBlogLikes = async (id) => {
+    try {
+      const blog = blogs.find((b) => b.id === id)
+      const updatedLikes = { likes: (blog.likes += 1) }
+      // console.log(updatedLikes)
+      await blogService.update(id, updatedLikes)
+      const updatedBlogs = await blogService.getAll()
+      sortAndSetBlogs(updatedBlogs)
+      setNotification(`${blog.title} updated succesfully.`)
+      setTimeout(() => setNotification(null), 5000)
+    } catch (exception) {
+      setErrorMessage('Error, couldnt update likes.')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
   }
 
-  const addBlogComment = (event) => {
-    event.preventDefault()
-    const id = event.target.comment.id
-    const comment = event.target.comment.value
-    const blog = blogs.find((b) => b.id === id)
-    const updatedComments = { comments: blog.comments.concat(comment) }
-    dispatch(updateBlog(id, updatedComments))
-    event.target.comment.value = ''
-  }
-
-  const deleteBlog = (id) => {
+  const deleteBlog = async (id) => {
     const blogToDelete = blogs.find((b) => b.id === id)
     if (window.confirm(`Delete ${blogToDelete.title}`)) {
-      dispatch(destroyBlog(id))
+      try {
+        await blogService.destroy(id)
+        const updatedBlogs = blogs.filter((blog) => blog.id !== id)
+        sortAndSetBlogs(updatedBlogs)
+        setNotification(`${blogToDelete.title} deleted.`)
+        setTimeout(() => setNotification(null), 5000)
+      } catch (exception) {
+        setErrorMessage('Could not delete blog.')
+        setTimeout(() => setErrorMessage(null), 5000)
+      }
     }
-  }
-
-  const BlogList = ({ blogs }) => {
-    // const blogStyle = {
-    //   paddingTop: 10,
-    //   paddingLeft: 2,
-    //   border: 'solid',
-    //   borderWidth: 1,
-    //   marginBottom: 5,
-    // }
-    return (
-      <div>
-        <h2 className="bloglist">Blogs</h2>
-        <Table striped>
-          <tbody>
-            {blogs.map((blog) => (
-              <tr key={blog.id}>
-                <td>
-                  <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-                </td>
-                <td>{blog.author}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-    )
-  }
-
-  const CommentList = ({ comments }) => {
-    // console.log(comments)
-    if (comments.length === 0) {
-      return (
-        <div>
-          <em>No comments yet!</em>
-        </div>
-      )
-    }
-    return (
-      <ul>
-        {comments.map((c) => (
-          <li key={c}>{c}</li>
-        ))}
-      </ul>
-    )
-  }
-
-  const BlogView = ({ blog }) => {
-    const id = useParams().id
-    if (!blog) {
-      return null
-    }
-
-    return (
-      <div>
-        <h1>{blog.title}</h1>
-        <a href={blog.url}>{blog.url}</a>
-        <div>
-          {blog.likes}&nbsp;likes&nbsp;
-          <button onClick={() => updateBlogLikes(blog.id)}>like</button>
-          <div>added by: {blog.author}</div>
-          {user && (blog.user.id === user.id || blog.user === user.id) ? (
-            <button onClick={() => deleteBlog(blog.id)}>Delete</button>
-          ) : null}
-        </div>
-        <h2>Comments</h2>
-        <div>
-          <form onSubmit={addBlogComment}>
-            <input name="comment" id={id} />
-            <button type="submit">add comment</button>
-          </form>
-        </div>
-        <CommentList comments={blog.comments} />
-      </div>
-    )
-  }
-
-  const Users = ({ users }) => {
-    // console.log(users)
-    return (
-      <div>
-        <h2 className="users">Users</h2>
-        <table>
-          <tbody>
-            <tr>
-              <td>User name</td>
-              <td>blogs created</td>
-            </tr>
-            {users.map((user) => (
-              <tr key={user.username}>
-                <td>
-                  <Link to={`/users/${user.id}`}>{user.name}</Link>
-                </td>
-                <td style={{ textAlign: 'right' }}>{user.blogs.length}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )
-  }
-
-  const UserView = ({ users }) => {
-    const id = useParams().id
-    const user = users.find((u) => u.id === id)
-
-    if (!user) {
-      return null
-    }
-    return (
-      <div>
-        <h2>{user.name}</h2>
-        <h3>added blogs</h3>
-        <ul>
-          {user.blogs.map((blog) => (
-            <li key={blog.id}>{blog.title}</li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
-
-  const padding = {
-    padding: 5,
-  }
-
-  const navStyle = {
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: 'lightgrey',
   }
 
   return (
-    <div className="container">
-      <div style={navStyle}>
-        <Link style={padding} to="/">
-          blogs
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
-        {user ? (
-          <>
-            <b>{user.name} logged-in&nbsp;</b>
-            <button onClick={handleLogout}>logout</button>
-          </>
-        ) : null}
-      </div>
-      <Notification
-        message={notification.message}
-        messageType={notification.type}
-      />
+    <div>
       <h1>Bloglist</h1>
+      <Notification message={notification} />
+      <Error message={errorMessage} />
       {user === null ? (
         loginForm()
       ) : (
         <div>
+          <p>
+            {user.name} logged-in&nbsp;
+            <button onClick={handleLogout}>logout</button>
+          </p>
           <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
             <BlogForm createBlog={addBlog} />
           </Togglable>
         </div>
       )}
-
-      <Routes>
-        <Route path="/" element={<BlogList blogs={blogs} />} />
-        <Route path="/blogs/:id" element={<BlogView blog={blog} />} />
-        <Route path="/users" element={<Users users={users} />} />
-        <Route path="/users/:id" element={<UserView users={users} />} />
-      </Routes>
+      <h2 className="bloglist">blogs</h2>
+      {blogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          user={user}
+          updateBlogLikes={updateBlogLikes}
+          deleteBlog={deleteBlog}
+        />
+      ))}
     </div>
   )
 }
