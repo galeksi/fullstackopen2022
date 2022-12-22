@@ -162,9 +162,7 @@ const App = () => {
   }
 
   const BlogView = ({ blog }) => {
-    console.log(blog)
     const id = useParams().id
-    // const blog = blogs.find((u) => u.id === id)
     if (!blog) {
       return null
     }
@@ -179,7 +177,7 @@ const App = () => {
           <div>added by: {blog.author}</div>
           {/* {console.log(user.id)} */}
           {console.log(blog.user)}
-          {user && blog.user.id === user.id ? (
+          {user && (blog.user.id === user.id || blog.user === user.id) ? (
             <button onClick={() => deleteBlog(blog.id)}>Delete</button>
           ) : null}
         </div>
