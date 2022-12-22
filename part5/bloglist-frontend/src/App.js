@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useParams,
-  Link,
-} from 'react-router-dom'
+import { Routes, Route, useParams, Link, useMatch } from 'react-router-dom'
 // import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -54,6 +48,9 @@ const App = () => {
   const notification = useSelector((state) => state.notifications)
   const blogs = useSelector((state) => state.blogs)
   const user = useSelector((state) => state.user)
+
+  const match = useMatch('/blogs/:id')
+  const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -164,9 +161,10 @@ const App = () => {
     )
   }
 
-  const BlogView = ({ blogs }) => {
+  const BlogView = ({ blog }) => {
+    console.log(blog)
     const id = useParams().id
-    const blog = blogs.find((u) => u.id === id)
+    // const blog = blogs.find((u) => u.id === id)
     if (!blog) {
       return null
     }
@@ -253,45 +251,43 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <div>
-        <div style={navStyle}>
-          <Link style={padding} to="/">
-            blogs
-          </Link>
-          <Link style={padding} to="/users">
-            users
-          </Link>
-          {user ? (
-            <>
-              <b>{user.name} logged-in&nbsp;</b>
-              <button onClick={handleLogout}>logout</button>
-            </>
-          ) : null}
-        </div>
-        <Notification
-          message={notification.message}
-          messageType={notification.type}
-        />
-        <h1>Bloglist</h1>
-        {user === null ? (
-          loginForm()
-        ) : (
-          <div>
-            <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
-              <BlogForm createBlog={addBlog} />
-            </Togglable>
-          </div>
-        )}
-
-        <Routes>
-          <Route path="/" element={<BlogList blogs={blogs} />} />
-          <Route path="/blogs/:id" element={<BlogView blogs={blogs} />} />
-          <Route path="/users" element={<Users users={users} />} />
-          <Route path="/users/:id" element={<UserView users={users} />} />
-        </Routes>
+    <div>
+      <div style={navStyle}>
+        <Link style={padding} to="/">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+        {user ? (
+          <>
+            <b>{user.name} logged-in&nbsp;</b>
+            <button onClick={handleLogout}>logout</button>
+          </>
+        ) : null}
       </div>
-    </Router>
+      <Notification
+        message={notification.message}
+        messageType={notification.type}
+      />
+      <h1>Bloglist</h1>
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          <Togglable buttonLabel={'Add blog'} buttonLabelBack={'cancel'}>
+            <BlogForm createBlog={addBlog} />
+          </Togglable>
+        </div>
+      )}
+
+      <Routes>
+        <Route path="/" element={<BlogList blogs={blogs} />} />
+        <Route path="/blogs/:id" element={<BlogView blog={blog} />} />
+        <Route path="/users" element={<Users users={users} />} />
+        <Route path="/users/:id" element={<UserView users={users} />} />
+      </Routes>
+    </div>
   )
 }
 
