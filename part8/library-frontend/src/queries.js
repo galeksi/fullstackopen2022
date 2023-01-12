@@ -10,6 +10,17 @@ export const ALL_AUTHORS = gql`
   }
 `;
 
+export const UPDATE_AUTHOR = gql`
+  mutation changeBirthdate($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo) {
+      name
+      born
+      bookCount
+      id
+    }
+  }
+`;
+
 export const ALL_BOOKS = gql`
   query {
     allBooks {
