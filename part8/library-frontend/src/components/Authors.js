@@ -34,6 +34,35 @@ const Authors = (props) => {
     setBorn("");
   };
 
+  const token = localStorage.getItem("user-token");
+
+  const setBirthyear = () => {
+    return (
+      <div>
+        <h2>Set birthyear</h2>
+        <div>
+          <form onSubmit={update}>
+            <div>
+              <Select
+                defaultValue={name}
+                onChange={setName}
+                options={authorOptions}
+              />
+            </div>
+            <div>
+              born
+              <input
+                value={born}
+                onChange={({ target }) => setBorn(parseInt(target.value))}
+              />
+            </div>
+            <button type="submit">update author</button>
+          </form>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2>authors</h2>
@@ -53,26 +82,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h2>Set birthyear</h2>
-      <div>
-        <form onSubmit={update}>
-          <div>
-            <Select
-              defaultValue={name}
-              onChange={setName}
-              options={authorOptions}
-            />
-          </div>
-          <div>
-            born
-            <input
-              value={born}
-              onChange={({ target }) => setBorn(parseInt(target.value))}
-            />
-          </div>
-          <button type="submit">update author</button>
-        </form>
-      </div>
+      {token ? setBirthyear() : null}
     </div>
   );
 };
