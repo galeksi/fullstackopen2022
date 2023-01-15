@@ -34,7 +34,7 @@ const Authors = (props) => {
     setBorn("");
   };
 
-  const token = localStorage.getItem("user-token");
+  // const token = localStorage.getItem("user-token");
 
   const setBirthyear = () => {
     return (
@@ -82,7 +82,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      {token ? setBirthyear() : null}
+      {props.token ? setBirthyear() : null}
     </div>
   );
 };
