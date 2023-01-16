@@ -49,11 +49,11 @@ const App = () => {
 
       <Books show={page === "books"} />
 
-      <NewBook show={page === "add"} />
+      <NewBook show={page === "add"} setPage={setPage} />
 
       <Recommendation show={page === "recommendation"} token={token} />
 
-      <Login show={page === "login"} setToken={setToken} />
+      <Login show={page === "login"} setToken={setToken} setPage={setPage} />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { ALL_BOOKS, CURRENT_USER } from "../queries";
 
-const Recommendation = (props) => {
+const Recommendation = ({ show, token }) => {
   const [books, setBooks] = useState([]);
 
   const [getCurrentUser] = useLazyQuery(CURRENT_USER, {
@@ -20,10 +20,10 @@ const Recommendation = (props) => {
   });
 
   useEffect(() => {
-    if (props.token) getCurrentUser();
-  }, [getCurrentUser, props.token]);
+    if (token) getCurrentUser();
+  }, [getCurrentUser, token]);
 
-  if (!props.show) {
+  if (!show) {
     return null;
   }
 
