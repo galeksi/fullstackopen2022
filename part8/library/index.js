@@ -8,7 +8,7 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const http = require("http");
-const { execute, subscribe } = require("graphql");
+// const { execute, subscribe } = require("graphql");
 const { WebSocketServer } = require("ws");
 const { useServer } = require("graphql-ws/lib/use/ws");
 require("dotenv").config();
@@ -23,6 +23,7 @@ const User = require("./models/user");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
+const bookCountLoader = require("./loaders");
 
 console.log("connecting to", MONGODB_URI);
 mongoose
@@ -48,14 +49,6 @@ const start = async () => {
 
   const server = new ApolloServer({
     schema,
-    context: async ({ req }) => {
-      const auth = req ? req.headers.authorization : null;
-      if (auth && auth.toLowerCase().startsWith("bearer ")) {
-        const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
-        const currentUser = await User.findById(decodedToken.id);
-        return { currentUser };
-      }
-    },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
@@ -82,8 +75,9 @@ const start = async () => {
         if (auth && auth.toLowerCase().startsWith("bearer ")) {
           const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET);
           const currentUser = await User.findById(decodedToken.id);
-          return { currentUser };
+          return { currentUser, bookCountLoader };
         }
+        return { bookCountLoader };
       },
     })
   );

@@ -4,6 +4,7 @@ const Book = require("./models/book");
 const Author = require("./models/author");
 const User = require("./models/user");
 const jwt = require("jsonwebtoken");
+// const bookCountLoader = require("./loaders");
 require("dotenv").config();
 
 const pubsub = new PubSub();
@@ -49,12 +50,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({});
-      const booksByAuthor = books.filter(
-        (b) => JSON.stringify(b.author) === JSON.stringify(root._id)
-      );
-      return booksByAuthor.length;
+    bookCount: (root, args, context) => {
+      return context.bookCountLoader.load(root._id);
     },
   },
   Mutation: {
