@@ -58,8 +58,8 @@ const calculateExercises = (
 };
 
 try {
-  const arguments = validateArgs(process.argv);
-  console.log(calculateExercises(arguments[0], arguments.slice(1)));
+  const exerciseArgs = validateArgs(process.argv);
+  console.log(calculateExercises(exerciseArgs[0], exerciseArgs.slice(1)));
 } catch (error: unknown) {
   let errorMessage = "Something bad happened.";
   if (error instanceof Error) {

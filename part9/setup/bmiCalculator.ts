@@ -22,11 +22,11 @@ const calculateBmi = (height: number, weight: number) => {
   // console.log(bmi);
 
   if (bmi < 18.5) {
-    console.log("Underweight");
+    return "Underweight";
   } else if (bmi >= 18.5 && bmi < 30) {
-    console.log("Normal (Healthy weight)");
+    return "Normal (Healthy weight)";
   } else if (bmi >= 30) {
-    console.log("Overweight");
+    return "Overweight";
   } else {
     throw new Error("BMI could not be calculated");
   }
@@ -34,7 +34,7 @@ const calculateBmi = (height: number, weight: number) => {
 
 try {
   const { height, weight } = parseArguments(process.argv);
-  calculateBmi(height, weight);
+  console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
   let errorMessage = "Something bad happened.";
   if (error instanceof Error) {
@@ -42,3 +42,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default calculateBmi;
