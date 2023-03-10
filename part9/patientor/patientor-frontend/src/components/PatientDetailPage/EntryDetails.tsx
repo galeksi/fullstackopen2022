@@ -5,18 +5,12 @@ import { Typography, Box } from "@mui/material";
 import MedicalInformationOutlinedIcon from "@mui/icons-material/MedicalInformationOutlined";
 import InventoryOutlinedIcon from "@mui/icons-material/InventoryOutlined";
 import MedicalServicesOutlinedIcon from "@mui/icons-material/MedicalServicesOutlined";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const assertNever = (value: never): never => {
   throw new Error(
     `Unhandled discriminated union member: ${JSON.stringify(value)}`
   );
-};
-
-const returnHealthRating = (number: number) => {
-  for (let i = 0; i < number; i++) {
-    return <FavoriteIcon />;
-  }
 };
 
 interface Props {
@@ -70,7 +64,11 @@ const EntryDetails = ({ entry, diagnoses }: Props) => {
             <InventoryOutlinedIcon />
           </Typography>
           <Typography>{entry.description}</Typography>
-          {returnHealthRating(entry.healthCheckRating)}
+          {[...Array(entry.healthCheckRating + 1)].map(
+            (value: undefined, index: number) => (
+              <FavoriteBorderIcon key={index} />
+            )
+          )}
           <Typography mt={2}>Diagnose by: {entry.specialist}</Typography>
           <ul>
             {entry.diagnosisCodes?.map((d) => (

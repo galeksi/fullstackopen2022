@@ -45,7 +45,7 @@ const PatientDetailPage = ({ diagnoses }: Props) => {
         Entries:
       </Typography>
       {patient?.entries.map((e) => (
-        <EntryDetails entry={e} diagnoses={diagnoses} />
+        <EntryDetails key={e.id} entry={e} diagnoses={diagnoses} />
       ))}
     </Box>
   );
