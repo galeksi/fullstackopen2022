@@ -44,22 +44,6 @@ const PatientDetailPage = ({ diagnoses }: Props) => {
       <Typography variant="h6" my={2}>
         Entries:
       </Typography>
-      {/* {patient?.entries.map((e) => (
-        <Box key={e.id}>
-          <Typography variant="body1">
-            {e.date} - {e.description}
-          </Typography>
-          <ul>
-            {e.diagnosisCodes?.map((d) => (
-              <li key={d}>
-                <Typography variant="body2">
-                  {d} {diagnoses.find((e) => e.code === d)?.name}
-                </Typography>
-              </li>
-            ))}
-          </ul>
-        </Box>
-      ))} */}
       {patient?.entries.map((e) => (
         <EntryDetails entry={e} diagnoses={diagnoses} />
       ))}
