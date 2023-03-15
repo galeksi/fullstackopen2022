@@ -48,12 +48,6 @@ const parseHealthRating = (rating: unknown): HealthCheckRating => {
   return Number(rating);
 };
 
-// const parseHospitalDischarde = (element: unknown): object => {
-//   const discharge: object = {
-//     date: element.
-//   }
-// }
-
 export const toNewPatientEntry = (object: unknown): NewPatientEntry => {
   if (!object || typeof object !== "object") {
     throw new Error("Incorrect or missing data");
@@ -102,7 +96,7 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
           };
           return newHealthEntry;
         }
-        throw new Error("Incorrect data: some fields are missing");
+        throw new Error("Incorrect data: healthcheck rating is missing");
 
       case "Hospital":
         const newHealthEntry: NewHealthEntry = {
@@ -113,6 +107,8 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
         };
         if (
           "discharge" in object &&
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           "date" in object.discharge &&
           "criteria" in object.discharge
         ) {
@@ -123,6 +119,34 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
           return newHealthEntry;
         }
         return newHealthEntry;
+
+      case "OccupationalHealthcare":
+        if ("employerName" in object) {
+          const newHealthEntry: NewHealthEntry = {
+            type: "OccupationalHealthcare",
+            description: parseStringField(object.description, "description"),
+            date: parseDate(object.date),
+            specialist: parseStringField(object.specialist, "specialist"),
+            employerName: parseStringField(
+              object.employerName,
+              "employer name"
+            ),
+          };
+          if (
+            "sickLeave" in object &&
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            "startDate" in object.sickLeave &&
+            "endDate" in object.sickLeave
+          ) {
+            newHealthEntry.sickLeave = {
+              startDate: parseDate(object.sickLeave.startDate),
+              endDate: parseDate(object.sickLeave.endDate),
+            };
+          }
+          return newHealthEntry;
+        }
+        throw new Error("Incorrect data: employer name is missing");
       default:
         throw new Error("Incorrect data: correct union member missing");
     }
