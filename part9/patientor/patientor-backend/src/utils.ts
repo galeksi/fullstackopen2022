@@ -107,8 +107,8 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
         };
         if (
           "discharge" in object &&
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
+          typeof object.discharge === "object" &&
+          object.discharge &&
           "date" in object.discharge &&
           "criteria" in object.discharge
         ) {
@@ -134,8 +134,8 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
           };
           if (
             "sickLeave" in object &&
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            typeof object.sickLeave === "object" &&
+            object.sickLeave &&
             "startDate" in object.sickLeave &&
             "endDate" in object.sickLeave
           ) {
