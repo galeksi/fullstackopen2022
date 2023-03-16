@@ -3,6 +3,7 @@ import {
   Gender,
   NewHealthEntry,
   HealthCheckRating,
+  Diagnosis,
 } from "./types";
 
 const isString = (text: unknown): text is string => {
@@ -94,6 +95,11 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
             specialist: parseStringField(object.specialist, "specialist"),
             healthCheckRating: parseHealthRating(object.healthCheckRating),
           };
+          if ("diagnosisCodes" in object) {
+            newHealthEntry.diagnosisCodes = object.diagnosisCodes as Array<
+              Diagnosis["code"]
+            >;
+          }
           return newHealthEntry;
         }
         throw new Error("Incorrect data: healthcheck rating is missing");
@@ -105,6 +111,11 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
           date: parseDate(object.date),
           specialist: parseStringField(object.specialist, "specialist"),
         };
+        if ("diagnosisCodes" in object) {
+          newHealthEntry.diagnosisCodes = object.diagnosisCodes as Array<
+            Diagnosis["code"]
+          >;
+        }
         if (
           "discharge" in object &&
           typeof object.discharge === "object" &&
@@ -116,7 +127,6 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
             date: parseDate(object.discharge.date),
             criteria: parseStringField(object.discharge.criteria, "criteria"),
           };
-          return newHealthEntry;
         }
         return newHealthEntry;
 
@@ -132,6 +142,11 @@ export const toNewHealthEntry = (object: unknown): NewHealthEntry => {
               "employer name"
             ),
           };
+          if ("diagnosisCodes" in object) {
+            newHealthEntry.diagnosisCodes = object.diagnosisCodes as Array<
+              Diagnosis["code"]
+            >;
+          }
           if (
             "sickLeave" in object &&
             typeof object.sickLeave === "object" &&
