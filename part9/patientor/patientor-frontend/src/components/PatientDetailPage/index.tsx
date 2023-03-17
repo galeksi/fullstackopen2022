@@ -7,6 +7,7 @@ import { Box, Typography } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import EntryDetails from "./EntryDetails";
+import AddPatientEntry from "../AddPatienEntry";
 
 interface Props {
   diagnoses: Diagnosis[];
@@ -41,6 +42,7 @@ const PatientDetailPage = ({ diagnoses }: Props) => {
         <br />
         Occupation: {patient?.occupation}
       </Typography>
+      <AddPatientEntry setPatient={setPatient} />
       <Typography variant="h6" my={2}>
         Entries:
       </Typography>
