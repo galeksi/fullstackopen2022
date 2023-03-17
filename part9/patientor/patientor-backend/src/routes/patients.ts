@@ -41,7 +41,7 @@ router.post("/:id/entries", (req, res) => {
     );
     res.json(updatedPatient);
   } catch (error: unknown) {
-    let errorMessage = "Error";
+    let errorMessage = "Error:";
     if (error instanceof Error) {
       errorMessage += error.message;
     }
