@@ -1,4 +1,5 @@
 @baseUrl = http://localhost:3001/
+@id = 4
 
 ### Add blog
 POST {{baseUrl}}api/blogs
@@ -8,4 +9,21 @@ Content-Type: application/json
     "title": "Hello with Comment 2",
     "author": "Commenter 2",
     "url": "www.test5.com"
+}
+
+### Update likes
+PUT {{baseUrl}}api/blogs/{{id}}
+Content-Type: application/json
+
+{
+  "likes": 100
+}
+
+### Test faulty blog
+POST {{baseUrl}}api/blogs
+Content-Type: application/json
+
+{
+    "title": "Hello with Comment 2",
+    "author": "Commenter 2"
 }
