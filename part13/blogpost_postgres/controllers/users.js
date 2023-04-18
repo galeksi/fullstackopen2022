@@ -31,6 +31,21 @@ router.get("/:username", async (req, res) => {
     where: {
       username: req.params.username,
     },
+    attributes: { exclude: [""] },
+    include: [
+      {
+        model: Blog,
+        attributes: { exclude: ["userId"] },
+      },
+      {
+        model: Blog,
+        as: "readings",
+        attributes: { exclude: ["userId", "date", "createdAt", "updatedAt"] },
+        through: {
+          attributes: [],
+        },
+      },
+    ],
   });
   if (user) {
     res.json(user);
