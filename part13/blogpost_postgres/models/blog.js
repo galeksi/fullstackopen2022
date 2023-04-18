@@ -30,6 +30,13 @@ Blog.init(
     date: {
       type: DataTypes.DATE,
     },
+    year: {
+      type: DataTypes.INTEGER,
+      validate: {
+        max: 2023,
+        min: 1991,
+      },
+    },
   },
   {
     sequelize,
