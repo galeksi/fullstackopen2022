@@ -17,19 +17,16 @@ router.post("/", async (req, res) => {
   res.json(user);
 });
 
-router.get("/id/:id", async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).end();
-  }
-});
+router.get("/:id", async (req, res) => {
+  const where = {};
 
-router.get("/:username", async (req, res) => {
+  if (req.query.read) {
+    where.read = req.query.read;
+  }
+
   const user = await User.findOne({
     where: {
-      username: req.params.username,
+      id: req.params.id,
     },
     attributes: { exclude: [""] },
     include: [
@@ -42,7 +39,8 @@ router.get("/:username", async (req, res) => {
         as: "readings",
         attributes: { exclude: ["userId", "date", "createdAt", "updatedAt"] },
         through: {
-          attributes: [],
+          attributes: ["id", "read"],
+          where,
         },
       },
     ],

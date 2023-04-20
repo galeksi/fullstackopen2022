@@ -1,3 +1,6 @@
+const jwt = require("jsonwebtoken");
+const { SECRET } = require("../util/config");
+
 const errorHandler = (error, request, response, next) => {
   console.error(error.message);
 
@@ -20,4 +23,14 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = { errorHandler };
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    req.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+  } else {
+    next(Error("Token missing"));
+  }
+  next();
+};
+
+module.exports = { errorHandler, tokenExtractor };
