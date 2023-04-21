@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 const { Readinglist } = require("../models/index");
-const { tokenExtractor } = require("../util/middleware");
+const { tokenValidator } = require("../util/middleware");
 
 router.post("/", async (req, res) => {
   const listEntry = await Readinglist.create(req.body);
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
   res.json(readinglists);
 });
 
-router.put("/:id", tokenExtractor, async (req, res, next) => {
+router.put("/:id", tokenValidator, async (req, res, next) => {
   const readingList = await Readinglist.findByPk(req.params.id);
   const userId = req.decodedToken.id;
   if (readingList.dataValues.userId === userId) {

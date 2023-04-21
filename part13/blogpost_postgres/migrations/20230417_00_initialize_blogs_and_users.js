@@ -68,12 +68,6 @@ module.exports = {
       allowNull: false,
       references: { model: "users", key: "id" },
     });
-    // await queryInterface.addConstraint("users", {
-    //   fields: ["id"],
-    //   type: "foreign key",
-    //   name: "blogs_user_id_fk",
-    //   references: { table: "blogs", field: "user" },
-    // });
   },
   down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable("blogs");
